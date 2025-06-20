@@ -2,29 +2,34 @@
 {{!-- The tag above means: insert everything in this file into the body of the default.hbs template --}}
 
 <article class="page-full">
-    <header class="page-header">
-        <div class="container">
-            <h1 class="page-title">{{title}}</h1>
-            {{#if custom_excerpt}}
-                <p class="page-excerpt">{{custom_excerpt}}</p>
-            {{/if}}
-        </div>
-    </header>
-    
-    {{#if feature_image}}
-        <figure class="page-image">
-            <img src="{{img_url feature_image size="xl"}}" 
-                 srcset="{{img_url feature_image size="m"}} 600w,
-                         {{img_url feature_image size="l"}} 1000w,
-                         {{img_url feature_image size="xl"}} 2000w"
-                 sizes="(max-width: 1200px) 100vw, 1200px"
-                 alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}"
-                 loading="lazy">
-            {{#if feature_image_caption}}
-                <figcaption>{{feature_image_caption}}</figcaption>
-            {{/if}}
-        </figure>
-    {{/if}}
+    {{!-- Check if title and feature image should be shown based on page settings --}}
+    {{#unless @page.show_title_and_feature_image}}
+        {{!-- Hide title and feature image if setting is false --}}
+    {{else}}
+        <header class="page-header">
+            <div class="container">
+                <h1 class="page-title">{{title}}</h1>
+                {{#if custom_excerpt}}
+                    <p class="page-excerpt">{{custom_excerpt}}</p>
+                {{/if}}
+            </div>
+        </header>
+        
+        {{#if feature_image}}
+            <figure class="page-image">
+                <img src="{{img_url feature_image size="xl"}}" 
+                     srcset="{{img_url feature_image size="m"}} 600w,
+                             {{img_url feature_image size="l"}} 1000w,
+                             {{img_url feature_image size="xl"}} 2000w"
+                     sizes="(max-width: 1200px) 100vw, 1200px"
+                     alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}"
+                     loading="lazy">
+                {{#if feature_image_caption}}
+                    <figcaption>{{feature_image_caption}}</figcaption>
+                {{/if}}
+            </figure>
+        {{/if}}
+    {{/unless}}
     
     <section class="page-content gh-content">
         {{content}}
