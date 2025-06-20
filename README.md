@@ -2,6 +2,8 @@
 
 A modern, responsive portfolio theme for Ghost CMS with dark mode support and beautiful animations.
 
+[日本語版 README はこちら](README.ja.md)
+
 ![Ghost Portfolio Theme](https://img.shields.io/badge/Ghost-5.x-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
