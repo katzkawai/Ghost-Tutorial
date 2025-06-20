@@ -1,91 +1,99 @@
-# Ghost Portfolio Theme
+# Ghost ポートフォリオテーマ
 
-A modern, responsive portfolio theme for Ghost CMS with dark mode support and beautiful animations.
-
-[日本語版 README はこちら](README.ja.md)
+ダークモード対応と美しいアニメーションを備えた、Ghost CMS用のモダンでレスポンシブなポートフォリオテーマです。
 
 ![Ghost Portfolio Theme](https://img.shields.io/badge/Ghost-5.x-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-## 🎨 Features
+## 📚 ドキュメント
 
-- **Modern Design**: Clean and professional layout perfect for showcasing your work
-- **Dark Mode**: Automatic and manual dark/light theme switching
-- **Responsive**: Fully responsive design that looks great on all devices
-- **Portfolio Grid**: Beautiful grid layout with hover effects for your projects
-- **Customizable**: Easy to customize colors, fonts, and layouts through Ghost admin
-- **Performance**: Optimized for fast loading with lazy loading images
-- **SEO Ready**: Built with SEO best practices in mind
+このプロジェクトには、Ghost開発に役立つ複数のガイドが含まれています：
 
-## 📸 Screenshots
+- **[Handlebarsガイド](./handlebars-guide.md)** - Ghostテーマ開発で使用するHandlebarsテンプレートエンジンの初心者向けガイド
+- **[Ghost APIガイド](./ghost-api-guide.md)** - Content APIとAdmin APIの使い方を解説した完全ガイド
+- **[テーマアップロードガイド](./ghost-theme-upload-guide.md)** - Ghost.ioへのテーマアップロード手順とトラブルシューティング
+- **[ポートフォリオ設定ガイド](./portfolio-setup-guide.md)** - ポートフォリオコンテンツの作成と設定方法
+- **[CLAUDE.md](./CLAUDE.md)** - このプロジェクトの技術仕様と開発ガイドライン
 
-### Light Mode
-- Clean, minimal design with focus on content
-- Gradient hero section with call-to-action buttons
-- Grid-based portfolio showcase
+## 🎨 機能
 
-### Dark Mode
-- Eye-friendly dark theme
-- Maintains readability and visual hierarchy
-- Smooth transitions between themes
+- **モダンなデザイン**: 作品を魅力的に見せるクリーンでプロフェッショナルなレイアウト
+- **ダークモード**: 自動および手動でのダーク/ライトテーマ切り替え
+- **レスポンシブ対応**: すべてのデバイスで美しく表示される完全レスポンシブデザイン
+- **ポートフォリオグリッド**: ホバーエフェクト付きの美しいグリッドレイアウト
+- **カスタマイズ可能**: Ghost管理画面から色、フォント、レイアウトを簡単にカスタマイズ
+- **パフォーマンス**: 遅延読み込み画像による高速読み込みの最適化
+- **SEO対応**: SEOベストプラクティスに基づいて構築
 
-## 🚀 Quick Start
+## 📸 スクリーンショット
 
-### 1. Install Ghost
+### ライトモード
+- コンテンツに焦点を当てたクリーンでミニマルなデザイン
+- CTA（コールトゥアクション）ボタン付きのグラデーションヒーローセクション
+- グリッドベースのポートフォリオショーケース
+
+### ダークモード
+- 目に優しいダークテーマ
+- 読みやすさと視覚的階層を維持
+- テーマ間のスムーズな切り替え
+
+## 🚀 クイックスタート
+
+### 1. Ghostをインストール
 ```bash
-# Install Ghost-CLI
+# Ghost-CLIをインストール
 npm install ghost-cli -g
 
-# Create a new directory and install Ghost
+# 新しいディレクトリを作成してGhostをインストール
 mkdir my-portfolio
 cd my-portfolio
 ghost install local
 ```
 
-### 2. Install the Portfolio Theme
-1. Download or clone this repository
-2. Copy the `content/themes/portfolio` folder to your Ghost installation's `content/themes/` directory
-3. Restart Ghost: `ghost restart`
-4. Go to Ghost Admin → Settings → Design → Change theme
-5. Activate the "Portfolio" theme
+### 2. ポートフォリオテーマをインストール
+1. このリポジトリをダウンロードまたはクローン
+2. `content/themes/portfolio`フォルダをGhostインストールの`content/themes/`ディレクトリにコピー
+3. Ghostを再起動: `ghost restart`
+4. Ghost管理画面 → 設定 → デザイン → テーマを変更 に移動
+5. 「Portfolio」テーマを有効化
 
-### 3. Configure Your Site
-1. **Site Settings**: Update your site title, description, and logo in Ghost Admin → Settings → General
-2. **Navigation**: Set up your menu in Ghost Admin → Settings → Navigation
-   - Recommended structure:
-     - Home → `/`
-     - Portfolio → `/portfolio/`
-     - About → `/about/`
-     - Blog → `/blog/`
-     - Contact → `/contact/`
+### 3. サイトを設定
+1. **サイト設定**: Ghost管理画面 → 設定 → 一般 でサイトタイトル、説明、ロゴを更新
+2. **ナビゲーション**: Ghost管理画面 → 設定 → ナビゲーション でメニューを設定
+   - 推奨構成:
+     - ホーム → `/`
+     - ポートフォリオ → `/portfolio/`
+     - 自己紹介 → `/about/`
+     - ブログ → `/blog/`
+     - お問い合わせ → `/contact/`
 
-### 4. Create Content
+### 4. コンテンツを作成
 
-#### Portfolio Items
-1. Create new posts and mark them as "Featured" to display in your portfolio
-2. Add tags to categorize your work (e.g., "Web Development", "Design", "Photography")
-3. Use high-quality feature images for best results
+#### ポートフォリオアイテム
+1. 新しい投稿を作成し、ポートフォリオに表示するために「注目」に設定
+2. 作品を分類するためのタグを追加（例：「ウェブ開発」、「デザイン」、「写真」）
+3. 最良の結果を得るために高品質なアイキャッチ画像を使用
 
-#### Required Pages
-Create these pages for a complete portfolio site:
-- **Portfolio** (slug: `portfolio`) - Uses the portfolio grid template
-- **About** (slug: `about`) - Your personal or company information
-- **Contact** (slug: `contact`) - Contact form and information
+#### 必須ページ
+完全なポートフォリオサイトのために以下のページを作成:
+- **ポートフォリオ** (slug: `portfolio`) - ポートフォリオグリッドテンプレートを使用
+- **自己紹介** (slug: `about`) - 個人または会社の情報
+- **お問い合わせ** (slug: `contact`) - お問い合わせフォームと情報
 
-## 🎨 Customization Options
+## 🎨 カスタマイズオプション
 
-### Theme Settings
-Available in Ghost Admin → Settings → Design:
+### テーマ設定
+Ghost管理画面 → 設定 → デザイン で利用可能:
 
-- **Navigation Layout**: Logo on left or centered
-- **Hero Style**: Full screen, Large, Medium, or Small
-- **Portfolio Layout**: Grid, Masonry, or List
-- **Accent Color**: Primary color for links and buttons
-- **Background Colors**: Separate colors for light and dark modes
-- **Social Links**: Toggle social media icons display
+- **ナビゲーションレイアウト**: ロゴを左寄せまたは中央配置
+- **ヒーロースタイル**: フルスクリーン、大、中、小
+- **ポートフォリオレイアウト**: グリッド、マサonリー、リスト
+- **アクセントカラー**: リンクとボタンのプライマリカラー
+- **背景色**: ライトモードとダークモード用の個別の色
+- **ソーシャルリンク**: ソーシャルメディアアイコンの表示切り替え
 
-### Custom CSS
-Add custom styles in Ghost Admin → Settings → Code Injection → Site Header:
+### カスタムCSS
+Ghost管理画面 → 設定 → コードインジェクション → サイトヘッダー でカスタムスタイルを追加:
 ```css
 <style>
   :root {
@@ -95,80 +103,80 @@ Add custom styles in Ghost Admin → Settings → Code Injection → Site Header
 </style>
 ```
 
-## 📁 Theme Structure
+## 📁 テーマ構造
 
 ```
 portfolio/
 ├── assets/
 │   ├── css/
-│   │   └── style.css       # Main stylesheet
+│   │   └── style.css       # メインスタイルシート
 │   └── built/
-│       └── style.css       # Production CSS
+│       └── style.css       # 本番用CSS
 ├── partials/
-│   ├── navigation.hbs      # Navigation menu
-│   └── email-subscription.hbs # Newsletter signup
-├── default.hbs             # Base template
-├── index.hbs              # Homepage
-├── post.hbs               # Blog post template
-├── page.hbs               # Static page template
-├── page-portfolio.hbs     # Portfolio page template
-├── page-contact.hbs       # Contact page template
-└── package.json           # Theme configuration
+│   ├── navigation.hbs      # ナビゲーションメニュー
+│   └── email-subscription.hbs # ニュースレター登録
+├── default.hbs             # ベーステンプレート
+├── index.hbs              # ホームページ
+├── post.hbs               # ブログ投稿テンプレート
+├── page.hbs               # 静的ページテンプレート
+├── page-portfolio.hbs     # ポートフォリオページテンプレート
+├── page-contact.hbs       # お問い合わせページテンプレート
+└── package.json           # テーマ設定
 ```
 
-## 🛠️ Development
+## 🛠️ 開発
 
-### Prerequisites
-- Node.js (v18.12.1 or higher)
+### 前提条件
+- Node.js (v18.12.1以上)
 - Ghost-CLI
-- Basic knowledge of Handlebars templating
+- Handlebarsテンプレートの基本知識
 
-### Local Development
-1. Clone this repository
-2. Link the theme to your local Ghost installation
-3. Make your changes
-4. Test thoroughly across different devices and browsers
+### ローカル開発
+1. このリポジトリをクローン
+2. テーマをローカルのGhostインストールにリンク
+3. 変更を加える
+4. 異なるデバイスとブラウザで十分にテスト
 
-### Building Assets
-The theme uses standard CSS. To modify styles:
-1. Edit `assets/css/style.css`
-2. Copy to `assets/built/style.css` for production
-3. Clear Ghost's cache if needed
+### アセットのビルド
+テーマは標準的なCSSを使用。スタイルを変更するには:
+1. `assets/css/style.css`を編集
+2. 本番用に`assets/built/style.css`にコピー
+3. 必要に応じてGhostのキャッシュをクリア
 
-## 📝 Sample Content
+## 📝 サンプルコンテンツ
 
-See `portfolio-setup-guide.md` for detailed instructions on creating sample content, including:
-- 6 portfolio project examples
-- About page content
-- Contact page setup
-- Blog post examples
+詳細なサンプルコンテンツの作成手順については`portfolio-setup-guide.md`を参照:
+- 6つのポートフォリオプロジェクト例
+- 自己紹介ページの内容
+- お問い合わせページの設定
+- ブログ投稿の例
 
-## 🤝 Contributing
+## 🤝 貢献
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+貢献を歓迎します！プルリクエストをお気軽に送信してください。
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. リポジトリをフォーク
+2. フィーチャーブランチを作成 (`git checkout -b feature/AmazingFeature`)
+3. 変更をコミット (`git commit -m 'Add some AmazingFeature'`)
+4. ブランチにプッシュ (`git push origin feature/AmazingFeature`)
+5. プルリクエストを開く
 
-## 📄 License
+## 📄 ライセンス
 
-This theme is released under the MIT License. See the [LICENSE](LICENSE) file for details.
+このテーマはMITライセンスの下でリリースされています。詳細は[LICENSE](LICENSE)ファイルを参照してください。
 
-## 🙏 Credits
+## 🙏 クレジット
 
-- Built for [Ghost CMS](https://ghost.org)
-- Icons from [Heroicons](https://heroicons.com)
-- Fonts: [Inter](https://fonts.google.com/specimen/Inter) and [Playfair Display](https://fonts.google.com/specimen/Playfair+Display)
+- [Ghost CMS](https://ghost.org)向けに構築
+- アイコン: [Heroicons](https://heroicons.com)
+- フォント: [Inter](https://fonts.google.com/specimen/Inter)と[Playfair Display](https://fonts.google.com/specimen/Playfair+Display)
 
-## 💬 Support
+## 💬 サポート
 
-- For theme-specific issues, please use the [GitHub Issues](https://github.com/katzkawai/my-second-ghost/issues)
-- For Ghost-related questions, visit the [Ghost Forum](https://forum.ghost.org)
-- For general support, check the [Ghost Documentation](https://ghost.org/docs/)
+- テーマ固有の問題については、[GitHub Issues](https://github.com/katzkawai/my-second-ghost/issues)を使用してください
+- Ghost関連の質問については、[Ghostフォーラム](https://forum.ghost.org)をご覧ください
+- 一般的なサポートについては、[Ghostドキュメント](https://ghost.org/docs/)を確認してください
 
 ---
 
-Made with ❤️ for the Ghost community
+Ghostコミュニティのために❤️を込めて作成
