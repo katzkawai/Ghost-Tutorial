@@ -12,22 +12,51 @@ GhostにはコンテンツやサイトデータにアクセスするためのAPI
 
 ## 🔑 認証設定
 
-### 1. Content API キーの取得
+### 1. Content API キーの取得（詳細手順）
 
-1. Ghost管理画面にログイン
-2. **Settings** → **Integrations** → **Add custom integration**
-3. 統合名を入力（例：「My App」）
-4. **Content API Key**をコピー
+1. Ghost管理画面（`https://あなたのサイト名.ghost.io/ghost`）にログイン
+2. 左メニューの **Settings（設定）** → **Integrations（統合）** を選択
+3. **Custom Integrations（カスタム統合）** の下にある **Add custom integration** をクリック
+4. 任意の名前を入力（例：「My App」）して **Create** をクリック
+5. 表示される **Content API Key** をコピー
 
-### 2. Admin API キーの取得
+### 2. Admin API キーの取得（詳細手順）
 
 同じ統合設定画面で：
-- **Admin API Key**をコピー
-- **API URL**をメモ（例：`https://yoursite.ghost.io`）
+- **Admin API Key** をコピー（形式：`id:secret`）
+  - `id`：キーの識別子
+  - `secret`：トークンの生成に必要な秘密鍵
+- **API URL** をメモ（例：`https://yoursite.ghost.io`）
 
 ## 🌐 Content API の使い方
 
 ### 基本的なリクエスト
+
+#### cURLでの例（最もシンプル）
+
+```bash
+# 最新の投稿一覧を取得
+curl "https://あなたのサイト名.ghost.io/ghost/api/content/posts/?key=YOUR_CONTENT_API_KEY"
+
+# 特定の投稿を取得（IDで）
+curl "https://あなたのサイト名.ghost.io/ghost/api/content/posts/{id}/?key=YOUR_CONTENT_API_KEY"
+
+# タグを含めて取得
+curl "https://あなたのサイト名.ghost.io/ghost/api/content/posts/?key=YOUR_CONTENT_API_KEY&include=tags,authors"
+```
+
+#### JavaScriptでの例（Fetch API）
+
+```javascript
+// シンプルなfetchの例
+fetch('https://あなたのサイト名.ghost.io/ghost/api/content/posts/?key=YOUR_CONTENT_API_KEY')
+  .then(res => res.json())
+  .then(data => {
+    console.log(data.posts);
+  });
+```
+
+#### Ghost SDKを使用する例
 
 ```javascript
 // Content APIクライアントの初期化
@@ -36,7 +65,7 @@ const GhostContentAPI = require('@tryghost/content-api');
 const api = new GhostContentAPI({
   url: 'https://yoursite.ghost.io',
   key: 'your-content-api-key',
-  version: 'v5.0'
+  version: 'v5.0'  // Ghostのバージョンに合わせる
 });
 ```
 
@@ -199,13 +228,45 @@ async function getSettings() {
 
 ## 🔧 Admin API の使い方
 
-### JWTトークンの生成
+コンテンツの作成、更新、削除など、管理者レベルの操作ができます。Admin APIの認証にはJWT（JSON Web Token）を使います。
+
+### SDKのインストール
+
+```bash
+npm install @tryghost/admin-api
+```
+
+### Ghost Admin SDK を使用した例（最も簡単）
+
+```javascript
+const GhostAdminAPI = require('@tryghost/admin-api');
+
+// Admin APIクライアントの初期化
+const api = new GhostAdminAPI({
+  url: 'https://あなたのサイト名.ghost.io',
+  key: 'YOUR_ADMIN_API_KEY',  // id:secret形式のキー
+  version: 'v5.0'  // Ghostのバージョンに合わせる
+});
+
+// 投稿の作成例
+api.posts.add({
+  title: 'APIから投稿した記事',
+  html: '<p>これはAPIで作成した記事です。</p>',
+  status: 'published'
+}).then(post => {
+  console.log('投稿が作成されました:', post);
+}).catch(err => {
+  console.error('エラー:', err);
+});
+```
+
+### 手動でJWTトークンを生成する方法
 
 ```javascript
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
 
-// Admin APIキーを分割
+// Admin APIキーを分割（id:secret形式）
 const [id, secret] = adminApiKey.split(':');
 
 // JWTトークンを生成
@@ -706,6 +767,92 @@ const [posts, pages, tags] = await Promise.all([
 ]);
 ```
 
+## 📋 APIエンドポイント一覧
+
+### Content API エンドポイント（読み取り専用）
+
+| エンドポイント | 説明 | 例 |
+|------------|------|-----|
+| `/ghost/api/content/posts/` | 投稿一覧取得 | `GET /ghost/api/content/posts/?key=API_KEY` |
+| `/ghost/api/content/posts/{id}/` | 特定の投稿取得（ID） | `GET /ghost/api/content/posts/5a7b4f8c9d3e2a1b3c4d5e6f/?key=API_KEY` |
+| `/ghost/api/content/posts/slug/{slug}/` | 特定の投稿取得（スラッグ） | `GET /ghost/api/content/posts/slug/my-post/?key=API_KEY` |
+| `/ghost/api/content/pages/` | ページ一覧取得 | `GET /ghost/api/content/pages/?key=API_KEY` |
+| `/ghost/api/content/tags/` | タグ一覧取得 | `GET /ghost/api/content/tags/?key=API_KEY` |
+| `/ghost/api/content/authors/` | 著者一覧取得 | `GET /ghost/api/content/authors/?key=API_KEY` |
+| `/ghost/api/content/settings/` | サイト設定取得 | `GET /ghost/api/content/settings/?key=API_KEY` |
+
+### Admin API エンドポイント（管理者用）
+
+| エンドポイント | メソッド | 説明 | 例 |
+|------------|---------|------|-----|
+| `/ghost/api/admin/posts/` | POST | 投稿作成 | `POST /ghost/api/admin/posts/` |
+| `/ghost/api/admin/posts/{id}/` | PUT | 投稿更新 | `PUT /ghost/api/admin/posts/{id}/` |
+| `/ghost/api/admin/posts/{id}/` | DELETE | 投稿削除 | `DELETE /ghost/api/admin/posts/{id}/` |
+| `/ghost/api/admin/pages/` | POST | ページ作成 | `POST /ghost/api/admin/pages/` |
+| `/ghost/api/admin/tags/` | POST | タグ作成 | `POST /ghost/api/admin/tags/` |
+| `/ghost/api/admin/users/` | GET | ユーザー一覧 | `GET /ghost/api/admin/users/` |
+| `/ghost/api/admin/images/upload/` | POST | 画像アップロード | `POST /ghost/api/admin/images/upload/` |
+
+## 🎯 クイックスタート例
+
+### Content API - 最新5件の記事を取得
+
+```javascript
+// Node.js環境での例
+const fetch = require('node-fetch');
+
+async function getLatestPosts() {
+  const apiUrl = 'https://あなたのサイト名.ghost.io';
+  const contentApiKey = 'YOUR_CONTENT_API_KEY';
+  
+  const response = await fetch(
+    `${apiUrl}/ghost/api/content/posts/?key=${contentApiKey}&limit=5&include=tags,authors`
+  );
+  
+  const data = await response.json();
+  
+  data.posts.forEach(post => {
+    console.log(`タイトル: ${post.title}`);
+    console.log(`URL: ${post.url}`);
+    console.log(`公開日: ${post.published_at}`);
+    console.log('---');
+  });
+}
+
+getLatestPosts();
+```
+
+### Admin API - 新規記事を投稿
+
+```javascript
+const GhostAdminAPI = require('@tryghost/admin-api');
+
+const api = new GhostAdminAPI({
+  url: 'https://あなたのサイト名.ghost.io',
+  key: 'YOUR_ADMIN_API_KEY',
+  version: 'v5.0'
+});
+
+async function createNewPost() {
+  try {
+    const post = await api.posts.add({
+      title: '新しい記事のタイトル',
+      html: '<h2>見出し</h2><p>これは本文です。</p>',
+      status: 'published',
+      tags: ['API', 'テスト'],
+      meta_title: 'SEO用のタイトル',
+      meta_description: 'SEO用の説明文'
+    });
+    
+    console.log('記事が作成されました:', post.url);
+  } catch (error) {
+    console.error('エラー:', error);
+  }
+}
+
+createNewPost();
+```
+
 ## 🔗 便利なツールとライブラリ
 
 ### 公式ライブラリ
@@ -718,12 +865,19 @@ const [posts, pages, tags] = await Promise.all([
 - [gatsby-source-ghost](https://www.gatsbyjs.com/plugins/gatsby-source-ghost/) - Gatsby統合
 - [ghost-nextjs](https://github.com/styxlab/next-cms-ghost) - Next.js統合
 
+### 開発に便利なツール
+
+- [Postman](https://www.postman.com/) - API テストツール
+- [Thunder Client](https://www.thunderclient.io/) - VS Code拡張機能
+- [httpie](https://httpie.io/) - コマンドラインHTTPクライアント
+
 ## 📚 参考リンク
 
-- [Ghost Content API Documentation](https://ghost.org/docs/content-api/)
-- [Ghost Admin API Documentation](https://ghost.org/docs/admin-api/)
-- [Ghost API Webhooks](https://ghost.org/docs/webhooks/)
-- [Ghost API SDK](https://ghost.org/docs/api/javascript/)
+- [Ghost Content API Documentation](https://ghost.org/docs/content-api/) - Content API公式ドキュメント
+- [Ghost Admin API Documentation](https://ghost.org/docs/admin-api/) - Admin API公式ドキュメント
+- [Ghost API Webhooks](https://ghost.org/docs/webhooks/) - Webhook設定
+- [Ghost API SDK](https://ghost.org/docs/api/javascript/) - JavaScript SDK
+- [Ghost API Tutorials](https://ghost.org/tutorials/) - 公式チュートリアル
 
 ---
 
