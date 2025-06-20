@@ -1,0 +1,74 @@
+{{!< default}}
+{{!-- The tag above means: insert everything in this file into the body of the default.hbs template --}}
+
+<article class="page-full">
+    <header class="page-header">
+        <div class="container">
+            <h1 class="page-title">{{title}}</h1>
+            {{#if custom_excerpt}}
+                <p class="page-excerpt">{{custom_excerpt}}</p>
+            {{/if}}
+        </div>
+    </header>
+    
+    {{#if feature_image}}
+        <figure class="page-image">
+            <img src="{{img_url feature_image size="xl"}}" 
+                 srcset="{{img_url feature_image size="m"}} 600w,
+                         {{img_url feature_image size="l"}} 1000w,
+                         {{img_url feature_image size="xl"}} 2000w"
+                 sizes="(max-width: 1200px) 100vw, 1200px"
+                 alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}"
+                 loading="lazy">
+            {{#if feature_image_caption}}
+                <figcaption>{{feature_image_caption}}</figcaption>
+            {{/if}}
+        </figure>
+    {{/if}}
+    
+    <section class="page-content gh-content">
+        {{content}}
+    </section>
+    
+</article>
+
+<style>
+/* Page specific styles */
+.page-full {
+    padding-top: 5rem;
+}
+
+.page-excerpt {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-top: 1rem;
+}
+
+.page-image {
+    max-width: 1200px;
+    margin: 0 auto 3rem;
+    padding: 0 1.5rem;
+}
+
+.page-image img {
+    width: 100%;
+    border-radius: 1rem;
+}
+
+.page-image figcaption {
+    text-align: center;
+    margin-top: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.gh-content {
+    /* Ensure Ghost content classes work properly */
+}
+
+.page-cta {
+    padding: 3rem 0;
+    background: var(--card-bg);
+    margin-top: 3rem;
+}
+</style>

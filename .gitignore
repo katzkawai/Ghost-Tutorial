@@ -1,0 +1,62 @@
+# Ghost runtime files
+.ghost-cli
+node_modules/
+npm-debug.log
+yarn-error.log
+.nyc_output/
+coverage/
+.coverage/
+
+# Ghost content files
+content/data/*.db
+content/logs/
+!content/logs/README.md
+content/public/
+!content/public/README.md
+content/images/
+!content/images/README.md
+!content/images/portfolio/
+content/adapters/storage/
+content/media/
+content/files/
+
+# Theme symlinks
+content/themes/casper
+content/themes/source
+
+# Versions directory (large Ghost installation)
+versions/
+current
+
+# Config files (may contain sensitive data)
+config.production.json
+config.staging.json
+config.testing.json
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build files
+*.log
+dist/
+build/
+.cache/
+
+# Environment variables
+.env
+.env.*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+.tmp*
+
+# Ghost process files
+.ghostpid

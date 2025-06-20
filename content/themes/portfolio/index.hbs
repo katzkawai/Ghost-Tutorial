@@ -1,0 +1,179 @@
+{{!< default}}
+
+{{!-- Hero section --}}
+<section class="hero {{@custom.hero_style}}">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">{{@site.title}}</h1>
+            {{#if @site.description}}
+                <p class="hero-description">{{@site.description}}</p>
+            {{/if}}
+            
+            <div class="hero-cta">
+                <a href="#portfolio" class="btn btn-primary">View Portfolio</a>
+                <a href="/about" class="btn btn-secondary">About Me</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{!-- Featured work section --}}
+<section id="portfolio" class="portfolio-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Featured Work</h2>
+            <p class="section-subtitle">Explore my latest projects and creative works</p>
+        </div>
+        
+        <div class="portfolio-grid {{@custom.portfolio_layout}}">
+            {{#get "posts" filter="featured:true" limit="6" include="tags,authors"}}
+                {{#foreach posts}}
+                    <article class="portfolio-item">
+                        <a href="{{url}}" class="portfolio-link">
+                            {{#if feature_image}}
+                                <div class="portfolio-image">
+                                    <img src="{{img_url feature_image size="l"}}" 
+                                         srcset="{{img_url feature_image size="s"}} 300w,
+                                                 {{img_url feature_image size="m"}} 600w,
+                                                 {{img_url feature_image size="l"}} 1000w"
+                                         sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 33vw"
+                                         alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}"
+                                         loading="lazy">
+                                    <div class="portfolio-overlay">
+                                        <span class="view-project">View Project</span>
+                                    </div>
+                                </div>
+                            {{/if}}
+                            
+                            <div class="portfolio-content">
+                                <h3 class="portfolio-title">{{title}}</h3>
+                                {{#if custom_excerpt}}
+                                    <p class="portfolio-excerpt">{{custom_excerpt}}</p>
+                                {{else}}
+                                    <p class="portfolio-excerpt">{{excerpt words="20"}}</p>
+                                {{/if}}
+                                
+                                {{#if tags}}
+                                    <div class="portfolio-tags">
+                                        {{#foreach tags limit="3"}}
+                                            <span class="tag">{{name}}</span>
+                                        {{/foreach}}
+                                    </div>
+                                {{/if}}
+                            </div>
+                        </a>
+                    </article>
+                {{/foreach}}
+            {{/get}}
+        </div>
+        
+        <div class="section-footer">
+            <a href="/portfolio" class="btn btn-outline">View All Projects</a>
+        </div>
+    </div>
+</section>
+
+{{!-- Services section --}}
+<section class="services-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">What I Do</h2>
+            <p class="section-subtitle">Services and expertise I offer</p>
+        </div>
+        
+        <div class="services-grid">
+            <div class="service-item">
+                <div class="service-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="9" y1="9" x2="15" y2="9"></line>
+                        <line x1="9" y1="13" x2="15" y2="13"></line>
+                        <line x1="9" y1="17" x2="13" y2="17"></line>
+                    </svg>
+                </div>
+                <h3>Web Design</h3>
+                <p>Creating beautiful and functional designs that enhance user experience</p>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="16 18 22 12 16 6"></polyline>
+                        <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                </div>
+                <h3>Development</h3>
+                <p>Building responsive and performant websites with modern technologies</p>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5"></path>
+                        <path d="M2 12l10 5 10-5"></path>
+                    </svg>
+                </div>
+                <h3>Branding</h3>
+                <p>Developing unique brand identities that resonate with your audience</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{!-- Recent blog posts --}}
+<section class="blog-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Latest Articles</h2>
+            <p class="section-subtitle">Thoughts, tutorials, and insights</p>
+        </div>
+        
+        <div class="blog-grid">
+            {{#get "posts" filter="featured:false" limit="3" include="tags,authors"}}
+                {{#foreach posts}}
+                    <article class="blog-item">
+                        <a href="{{url}}" class="blog-link">
+                            {{#if feature_image}}
+                                <div class="blog-image">
+                                    <img src="{{img_url feature_image size="m"}}" 
+                                         alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}"
+                                         loading="lazy">
+                                </div>
+                            {{/if}}
+                            
+                            <div class="blog-content">
+                                <div class="blog-meta">
+                                    <time datetime="{{date format="YYYY-MM-DD"}}">{{date format="MMM DD, YYYY"}}</time>
+                                    {{#if reading_time}}
+                                        <span class="reading-time">{{reading_time}}</span>
+                                    {{/if}}
+                                </div>
+                                
+                                <h3 class="blog-title">{{title}}</h3>
+                                <p class="blog-excerpt">{{excerpt words="25"}}</p>
+                                
+                                <span class="read-more">Read more →</span>
+                            </div>
+                        </a>
+                    </article>
+                {{/foreach}}
+            {{/get}}
+        </div>
+        
+        <div class="section-footer">
+            <a href="/blog" class="btn btn-outline">View All Articles</a>
+        </div>
+    </div>
+</section>
+
+{{!-- CTA section --}}
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Let's Work Together</h2>
+            <p>Have a project in mind? I'd love to hear about it.</p>
+            <a href="/contact" class="btn btn-primary btn-large">Get In Touch</a>
+        </div>
+    </div>
+</section>

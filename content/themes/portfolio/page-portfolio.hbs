@@ -1,0 +1,164 @@
+{{!< default}}
+
+<div class="portfolio-page">
+    <header class="page-header">
+        <div class="container">
+            <h1 class="page-title">{{title}}</h1>
+            {{#if custom_excerpt}}
+                <p class="page-subtitle">{{custom_excerpt}}</p>
+            {{/if}}
+        </div>
+    </header>
+    
+    <section class="portfolio-filters">
+        <div class="container">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All Projects</button>
+                {{#get "tags" limit="all"}}
+                    {{#foreach tags}}
+                        <button class="filter-btn" data-filter="{{slug}}">{{name}}</button>
+                    {{/foreach}}
+                {{/get}}
+            </div>
+        </div>
+    </section>
+    
+    <section class="portfolio-showcase">
+        <div class="container">
+            <div class="portfolio-grid {{@custom.portfolio_layout}}">
+                {{#get "posts" filter="featured:true" limit="all" include="tags"}}
+                    {{#foreach posts}}
+                        <article class="portfolio-item" data-tags="{{#foreach tags}}{{slug}} {{/foreach}}">
+                            <a href="{{url}}" class="portfolio-link">
+                                {{#if feature_image}}
+                                    <div class="portfolio-image">
+                                        <img src="{{img_url feature_image size="l"}}" 
+                                             srcset="{{img_url feature_image size="s"}} 300w,
+                                                     {{img_url feature_image size="m"}} 600w,
+                                                     {{img_url feature_image size="l"}} 1000w"
+                                             sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 33vw"
+                                             alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}"
+                                             loading="lazy">
+                                        <div class="portfolio-overlay">
+                                            <span class="view-project">View Project</span>
+                                        </div>
+                                    </div>
+                                {{/if}}
+                                
+                                <div class="portfolio-content">
+                                    <h3 class="portfolio-title">{{title}}</h3>
+                                    {{#if custom_excerpt}}
+                                        <p class="portfolio-excerpt">{{custom_excerpt}}</p>
+                                    {{else}}
+                                        <p class="portfolio-excerpt">{{excerpt words="20"}}</p>
+                                    {{/if}}
+                                    
+                                    {{#if tags}}
+                                        <div class="portfolio-tags">
+                                            {{#foreach tags limit="3"}}
+                                                <span class="tag">{{name}}</span>
+                                            {{/foreach}}
+                                        </div>
+                                    {{/if}}
+                                </div>
+                            </a>
+                        </article>
+                    {{/foreach}}
+                {{/get}}
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+/* Portfolio page specific styles */
+.portfolio-page {
+    padding-top: 5rem;
+}
+
+.portfolio-filters {
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 3rem;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.filter-btn {
+    padding: 0.5rem 1.5rem;
+    background: transparent;
+    border: 2px solid var(--border-color);
+    border-radius: 9999px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+.portfolio-showcase {
+    padding-bottom: 4rem;
+}
+
+/* Animation for filtered items */
+.portfolio-item {
+    animation: fadeIn 0.5s ease;
+}
+
+.portfolio-item.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
+    
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const filter = this.getAttribute('data-filter');
+            
+            // Update active button
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Filter portfolio items
+            portfolioItems.forEach(item => {
+                if (filter === 'all') {
+                    item.classList.remove('hidden');
+                } else {
+                    const tags = item.getAttribute('data-tags');
+                    if (tags && tags.includes(filter)) {
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    });
+});
+</script>

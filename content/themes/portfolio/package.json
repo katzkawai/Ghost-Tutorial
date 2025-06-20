@@ -1,0 +1,84 @@
+{
+  "name": "portfolio",
+  "description": "A modern portfolio theme for Ghost CMS",
+  "version": "1.0.0",
+  "engines": {
+    "ghost": ">=5.0.0"
+  },
+  "author": {
+    "name": "Portfolio Theme",
+    "email": "portfolio@example.com"
+  },
+  "keywords": [
+    "ghost",
+    "theme",
+    "ghost-theme",
+    "portfolio"
+  ],
+  "config": {
+    "posts_per_page": 6,
+    "image_sizes": {
+      "xs": {
+        "width": 150
+      },
+      "s": {
+        "width": 300
+      },
+      "m": {
+        "width": 600
+      },
+      "l": {
+        "width": 1000
+      },
+      "xl": {
+        "width": 2000
+      }
+    },
+    "card_assets": true,
+    "custom": {
+      "navigation_layout": {
+        "type": "select",
+        "options": [
+          "Logo on left",
+          "Logo in center"
+        ],
+        "default": "Logo on left"
+      },
+      "hero_style": {
+        "type": "select",
+        "options": [
+          "Full screen",
+          "Large",
+          "Medium",
+          "Small"
+        ],
+        "default": "Large"
+      },
+      "portfolio_layout": {
+        "type": "select",
+        "options": [
+          "Grid",
+          "Masonry",
+          "List"
+        ],
+        "default": "Grid"
+      },
+      "accent_color": {
+        "type": "color",
+        "default": "#0066FF"
+      },
+      "light_mode_background": {
+        "type": "color",
+        "default": "#FFFFFF"
+      },
+      "dark_mode_background": {
+        "type": "color",
+        "default": "#1A1A1A"
+      },
+      "show_social_links": {
+        "type": "boolean",
+        "default": true
+      }
+    }
+  }
+}
