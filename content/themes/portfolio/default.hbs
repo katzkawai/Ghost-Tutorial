@@ -3,15 +3,15 @@
     🎨 default.hbs - メインレイアウトテンプレート
     ==========================================
     このファイルはすべてのページで使用される基本的なHTML構造を定義します。
-    他のテンプレート（index.hbs、post.hbs等）の内容は {{{body}}} の部分に挿入されます。
+    他のテンプレート（index.hbs、post.hbs等）の内容は 三重中括弧でbody変数 の部分に挿入されます。
     
     重要な概念：
-    - {{! }} または {{!-- --}} : Handlebarsのコメント（HTMLには出力されません）
-    - {{ }} : 変数や値を出力
-    - {{{ }}} : HTMLをエスケープせずに出力
-    - {{#if}} {{/if}} : 条件分岐
-    - {{@site}} : サイト全体の設定にアクセス
-    - {{@custom}} : テーマのカスタム設定にアクセス
+    - Handlebarsのコメント（HTMLには出力されません）
+    - 二重中括弧 : 変数や値を出力
+    - 三重中括弧 : HTMLをエスケープせずに出力
+    - #if と /if : 条件分岐
+    - @site : サイト全体の設定にアクセス
+    - @custom : テーマのカスタム設定にアクセス
 --}}
 <html lang="{{@site.locale}}">{{!-- サイトの言語設定を自動的に適用 --}}
 <head>
@@ -32,7 +32,7 @@
     
     {{!-- 
         テーマのCSSファイル
-        {{asset}} ヘルパー: テーマのassetsフォルダ内のファイルへのパスを生成
+        assetヘルパー: テーマのassetsフォルダ内のファイルへのパスを生成
         "built/style.css": コンパイルされたCSSファイル
     --}}
     <link rel="stylesheet" href="{{asset "built/style.css"}}">
@@ -40,7 +40,7 @@
     {{!-- 
         カスタムテーマ設定
         Ghost管理画面で設定した値を使用してCSSカスタムプロパティを定義
-        {{@custom.フィールド名}} でカスタム設定にアクセス
+        @custom.フィールド名 でカスタム設定にアクセス
     --}}
     <style>
         :root {
@@ -75,7 +75,7 @@
     </style>
     
     {{!-- 
-        {{ghost_head}} - Ghost必須のヘルパー
+        ghost_head - Ghost必須のヘルパー
         以下を自動的に挿入：
         - メタタグ（SEO、Open Graph、Twitter Card等）
         - 構造化データ（JSON-LD）
@@ -87,7 +87,7 @@
 </head>
 {{!-- 
     body要素
-    {{body_class}}: Ghostが自動的に適切なクラスを追加
+    body_class: Ghostが自動的に適切なクラスを追加
     例：
     - home-template: ホームページ
     - post-template: 記事ページ
@@ -106,23 +106,23 @@
     <header class="site-header">
         {{!-- 
             メインナビゲーション
-            {{#match}} ヘルパー: 値が一致するかチェック
+            matchヘルパー: 値が一致するかチェック
             @custom.navigation_layout が "Logo in center" の場合、nav-centerクラスを追加
         --}}
         <nav class="site-nav container {{#match @custom.navigation_layout "Logo in center"}}nav-center{{/match}}">
             <div class="nav-left">
                 {{!-- 
                     左側のロゴ表示
-                    {{^match}}: matchの否定（一致しない場合）
+                    match否定（^match）: 一致しない場合
                     つまり、navigation_layoutが"Logo in center"でない場合のみ表示
                 --}}
                 {{^match @custom.navigation_layout "Logo in center"}}
                 <a href="{{@site.url}}" class="site-logo">
                     {{!-- 
                         条件分岐でロゴ画像またはテキストを表示
-                        {{#if @site.logo}}: ロゴが設定されている場合
-                        {{else}}: ロゴが設定されていない場合
-                        {{/if}}: 条件分岐の終了
+                        if @site.logo: ロゴが設定されている場合
+                        else: ロゴが設定されていない場合
+                        /if: 条件分岐の終了
                     --}}
                     {{#if @site.logo}}
                         <img src="{{@site.logo}}" alt="{{@site.title}}">
@@ -147,10 +147,10 @@
             
             <div class="nav-menu">
                 {{!-- 
-                    {{navigation}} ヘルパー
+                    navigationヘルパー
                     Ghost管理画面で設定したナビゲーションメニューを自動生成
                     デフォルトでは主要ナビゲーションを表示
-                    {{navigation type="secondary"}} で副ナビゲーションを表示可能
+                    navigation type="secondary" で副ナビゲーションを表示可能
                 --}}
                 {{navigation}}
             </div>
@@ -190,8 +190,8 @@
     
     {{!-- 
         メインコンテンツエリア
-        {{{body}}}: 他のテンプレートファイル（index.hbs、post.hbs等）の内容がここに挿入される
-        3つの中括弧 {{{ }}} はHTMLをエスケープせずにそのまま出力
+        三重中括弧でbody変数: 他のテンプレートファイル（index.hbs、post.hbs等）の内容がここに挿入される
+        3つの中括弧はHTMLをエスケープせずにそのまま出力
     --}}
     <main class="site-main">
         {{{body}}}
@@ -211,7 +211,7 @@
                     <div class="social-links">
                         {{!-- 
                             Twitterリンク
-                            {{twitter_url}} ヘルパー: Twitterのユーザー名からURLを生成
+                            twitter_urlヘルパー: Twitterのユーザー名からURLを生成
                             target="_blank": 新しいタブで開く
                             rel="noopener": セキュリティ対策
                         --}}
@@ -248,7 +248,7 @@
             <div class="footer-bottom">
                 {{!-- 
                     コピーライト表示
-                    {{date format="YYYY"}}: 現在の年を表示（例：2024）
+                    date format="YYYY": 現在の年を表示（例：2024）
                     formatには様々な形式を指定可能：
                     - "YYYY年MM月DD日"
                     - "MMMM DD, YYYY"
@@ -290,7 +290,7 @@
     </script>
     
     {{!-- 
-        {{ghost_foot}} - Ghost必須のヘルパー
+        ghost_foot - Ghost必須のヘルパー
         以下を自動的に挿入：
         - Ghost管理画面で設定したフッターコード
         - 必要なJavaScriptライブラリ

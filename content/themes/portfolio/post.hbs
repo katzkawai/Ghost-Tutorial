@@ -3,7 +3,7 @@
     ==========================================
     このテンプレートは個々のブログ記事やポートフォリオ作品を表示する際に使用されます。
     
-    {{!< default}}: default.hbs を親テンプレートとして使用
+    左矢印でdefaultテンプレートを継承: default.hbs を親テンプレートとして使用
 --}}
 {{!< default}}
 
@@ -17,8 +17,8 @@
             {{!-- 
                 プライマリタグの表示
                 primary_tag: 記事に設定された最初のタグ（メインカテゴリ）
-                {{primary_tag.url}}: タグページへのURL
-                {{primary_tag.name}}: タグ名
+                primary_tag.url: タグページへのURL
+                primary_tag.name: タグ名
             --}}
             {{#if primary_tag}}
                 <div class="post-category">
@@ -32,8 +32,8 @@
             <div class="post-meta">
                 {{!-- 
                     著者情報の表示
-                    {{#primary_author}}: メイン著者の情報にアクセス
-                    複数著者がいる場合は {{#foreach authors}} を使用可能
+                    primary_author: メイン著者の情報にアクセス
+                    複数著者がいる場合は foreach authors を使用可能
                 --}}
                 {{#primary_author}}
                     <div class="author-info">
@@ -88,7 +88,7 @@
     
     {{!-- 
         記事本文
-        {{content}}: Ghostエディタで作成されたコンテンツをHTMLで出力
+        content: Ghostエディタで作成されたコンテンツをHTMLで出力
         Ghostはエディタ内容を適切なHTMLタグに変換して出力
     --}}
     <section class="post-content">
@@ -99,7 +99,7 @@
         <div class="container">
             {{!-- 
                 タグ一覧
-                {{#foreach tags}}: すべてのタグをループ表示
+                foreach tags: すべてのタグをループ表示
                 各タグはタグアーカイブページへのリンク
             --}}
             {{#if tags}}
@@ -115,8 +115,8 @@
                 <div class="share-buttons">
                     {{!-- 
                         Twitterシェアボタン
-                        {{encode title}}: タイトルをURLエンコード
-                        {{url absolute="true"}}: 完全なURLを取得（https://から始まる）
+                        encode title: タイトルをURLエンコード
+                        url absolute="true": 完全なURLを取得（https://から始まる）
                     --}}
                     <a href="https://twitter.com/intent/tweet?text={{encode title}}&url={{url absolute="true"}}" 
                        target="_blank" rel="noopener" class="share-twitter">
@@ -182,9 +182,9 @@
         <div class="related-grid">
             {{!-- 
                 関連記事の取得
-                filter="id:-{{id}}+tag:{{primary_tag.slug}}": 
-                - id:-{{id}}: 現在の記事IDを除外
-                - tag:{{primary_tag.slug}}: 同じプライマリタグを持つ記事
+                filter="id:-現在の記事ID+tag:プライマリタグのslug": 
+                - id:-現在の記事ID: 現在の記事IDを除外
+                - tag:プライマリタグのslug: 同じプライマリタグを持つ記事
                 - +: AND条件
                 limit="3": 最大3件の関連記事を表示
             --}}

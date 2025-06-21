@@ -5,8 +5,8 @@
     固定ページはブログ記事とは異なり、タイムラインに表示されないコンテンツです。
     例：Aboutページ、Contactページ、プライバシーポリシーなど
     
-    {{!< default}}: default.hbs を親テンプレートとして使用
-    このファイルの内容が default.hbs の {{{body}}} 部分に挿入される
+    左矢印でdefaultテンプレートを継承: default.hbs を親テンプレートとして使用
+    このファイルの内容が default.hbs の body部分 に挿入される
 --}}
 {{!< default}}
 
@@ -18,8 +18,8 @@
         - falseの場合、タイトルとフィーチャー画像を非表示
         - true（デフォルト）の場合、通常通り表示
         
-        {{#unless}}: 条件が偽の場合に実行（{{#if}}の逆）
-        {{else}}: unlessブロックのelse部分
+        unless: 条件が偽の場合に実行（ifの逆）
+        else: unlessブロックのelse部分
     --}}
     {{#unless @page.show_title_and_feature_image}}
         {{!-- 設定がfalseの場合、タイトルとフィーチャー画像を非表示 --}}
@@ -66,7 +66,7 @@
     {{!-- 
         ページコンテンツ
         gh-content: Ghostのコンテンツ用クラス（エディタブロックのスタイリング用）
-        {{content}}: ページの本文内容をHTMLで出力
+        content: ページの本文内容をHTMLで出力
     --}}
     <section class="page-content gh-content">
         {{content}}
