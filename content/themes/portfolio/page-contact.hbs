@@ -1,3 +1,20 @@
+{{!-- 
+    📧 page-contact.hbs - お問い合わせページテンプレート
+    ==========================================
+    このテンプレートはお問い合わせページ専用のレイアウトを提供します。
+    
+    使い方：
+    1. Ghost管理画面で新しいページを作成
+    2. ページ設定で "Page template" を "Contact" に設定
+    3. URLを "contact" に設定
+    
+    機能：
+    - 連絡先情報の表示
+    - お問い合わせフォーム（JavaScriptで動作）
+    - ソーシャルメディアリンク
+    
+    注意：フォーム送信機能はサーバーサイドの実装が必要です
+--}}
 {{!< default}}
 
 <div class="contact-page">
@@ -14,6 +31,10 @@
         <div class="container">
             <div class="contact-grid">
                 <div class="contact-info">
+                    {{!-- 
+                        ページ本文
+                        Ghostエディタで作成したコンタクト情報などを表示
+                    --}}
                     {{content}}
                     
                     <div class="contact-methods">
@@ -40,6 +61,10 @@
                         </div>
                     </div>
                     
+                    {{!-- 
+                        ソーシャルメディアリンク
+                        @custom.show_social_links: カスタム設定で表示/非表示を制御
+                    --}}
                     {{#if @custom.show_social_links}}
                     <div class="contact-social">
                         <h3>Connect with me</h3>
@@ -73,6 +98,14 @@
                     {{/if}}
                 </div>
                 
+                {{!-- 
+                    お問い合わせフォーム
+                    注意：このフォームはデモ用で、実際の送信にはサーバーサイドの実装が必要
+                    オプション：
+                    - Formspree (https://formspree.io/)
+                    - Netlify Forms
+                    - カスタムAPIエンドポイント
+                --}}
                 <div class="contact-form-wrapper">
                     <form class="contact-form" id="contactForm">
                         <div class="form-group">
@@ -244,24 +277,37 @@
 }
 </style>
 
+{{!-- 
+    お問い合わせフォームのJavaScript
+    現在はデモ動作のみ（成功メッセージを表示）
+    実際の使用には、fetch APIを使ってサーバーにデータを送信する必要があります
+--}}
 <script>
 document.getElementById('contactForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+    e.preventDefault(); // フォームのデフォルト送信を無効化
     
     const formData = new FormData(this);
     const formMessage = document.getElementById('formMessage');
     
-    // Here you would normally send the form data to a server
-    // For demonstration, we'll just show a success message
+    // ここで通常はサーバーにフォームデータを送信します
+    // デモのため、成功メッセージを表示するだけにしています
+    
+    // 実際の実装例：
+    // fetch('/api/contact', {
+    //     method: 'POST',
+    //     body: formData
+    // }).then(response => {
+    //     // レスポンスを処理
+    // });
     
     formMessage.textContent = 'Thank you for your message! I\'ll get back to you soon.';
     formMessage.className = 'form-message success';
     formMessage.style.display = 'block';
     
-    // Reset form
+    // フォームをリセット
     this.reset();
     
-    // Hide message after 5 seconds
+    // 5秒後にメッセージを非表示
     setTimeout(() => {
         formMessage.style.display = 'none';
     }, 5000);

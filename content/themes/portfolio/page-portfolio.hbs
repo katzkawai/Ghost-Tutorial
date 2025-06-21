@@ -1,3 +1,18 @@
+{{!-- 
+    🎨 page-portfolio.hbs - ポートフォリオ専用ページテンプレート
+    ==========================================
+    このテンプレートはポートフォリオ作品一覧を表示する専用ページです。
+    
+    使い方：
+    1. Ghost管理画面で新しいページを作成
+    2. ページ設定で "Page template" を "Portfolio" に設定
+    3. URLを "portfolio" に設定
+    
+    機能：
+    - タグでフィルタリングできるポートフォリオ一覧
+    - JavaScriptによるクライアントサイドフィルタリング
+    - レスポンシブグリッドレイアウト
+--}}
 {{!< default}}
 
 <div class="portfolio-page">
@@ -10,10 +25,20 @@
         </div>
     </header>
     
+    {{!-- 
+        フィルターセクション
+        ポートフォリオをタグでフィルタリングするボタンを表示
+    --}}
     <section class="portfolio-filters">
         <div class="container">
             <div class="filter-buttons">
+                {{!-- すべてのプロジェクトを表示するボタン（デフォルトでアクティブ） --}}
                 <button class="filter-btn active" data-filter="all">All Projects</button>
+                
+                {{!-- 
+                    すべてのタグを取得してフィルターボタンを生成
+                    data-filter: JavaScriptでフィルタリングに使用するタグのslug
+                --}}
                 {{#get "tags" limit="all"}}
                     {{#foreach tags}}
                         <button class="filter-btn" data-filter="{{slug}}">{{name}}</button>
@@ -26,8 +51,17 @@
     <section class="portfolio-showcase">
         <div class="container">
             <div class="portfolio-grid {{@custom.portfolio_layout}}">
+                {{!-- 
+                    すべての特集記事（ポートフォリオ作品）を取得
+                    filter="featured:true": 特集フラグがオンの記事のみ
+                    limit="all": すべての特集記事を取得
+                --}}
                 {{#get "posts" filter="featured:true" limit="all" include="tags"}}
                     {{#foreach posts}}
+                        {{!-- 
+                            data-tags属性: JavaScriptでフィルタリングに使用
+                            記事のすべてのタグslugをスペース区切りで連結
+                        --}}
                         <article class="portfolio-item" data-tags="{{#foreach tags}}{{slug}} {{/foreach}}">
                             <a href="{{url}}" class="portfolio-link">
                                 {{#if feature_image}}
@@ -132,6 +166,10 @@
 }
 </style>
 
+{{!-- 
+    ポートフォリオフィルタリング機能のJavaScript
+    タグをクリックすると、該当する作品のみを表示
+--}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const filterButtons = document.querySelectorAll('.filter-btn');
@@ -141,19 +179,23 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function() {
             const filter = this.getAttribute('data-filter');
             
-            // Update active button
+            // アクティブボタンの更新
             filterButtons.forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
             
-            // Filter portfolio items
+            // ポートフォリオアイテムのフィルタリング
             portfolioItems.forEach(item => {
                 if (filter === 'all') {
+                    // "All Projects"が選択された場合、すべてを表示
                     item.classList.remove('hidden');
                 } else {
+                    // 特定のタグが選択された場合
                     const tags = item.getAttribute('data-tags');
                     if (tags && tags.includes(filter)) {
+                        // タグが一致する場合は表示
                         item.classList.remove('hidden');
                     } else {
+                        // タグが一致しない場合は非表示
                         item.classList.add('hidden');
                     }
                 }

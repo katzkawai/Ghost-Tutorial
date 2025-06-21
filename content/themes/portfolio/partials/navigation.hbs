@@ -1,6 +1,31 @@
+{{!-- 
+    🦭 navigation.hbs - ナビゲーションパーシャル
+    ==========================================
+    これはパーシャルテンプレートで、{{navigation}} ヘルパーによって呼び出されます。
+    Ghost管理画面の Settings > Navigation で設定したメニュー項目を表示します。
+    
+    パーシャルの特徴：
+    - 再利用可能なコードスニペット
+    - partials/フォルダ内に配置
+    - {{> "partial-name"}} または ヘルパー経由で呼び出し
+--}}
+
 <ul class="nav-list">
+    {{!-- 
+        navigationオブジェクトをループ
+        各ナビゲーションアイテムには以下のプロパティがあります：
+        - label: 表示名
+        - url: リンク先URL
+        - current: 現在のページかどうかの真偽値
+        - slug: URLスラッグ
+    --}}
     {{#foreach navigation}}
         <li class="nav-item {{#if current}}nav-current{{/if}}">
+            {{!-- 
+                absolute="true": 完全なURLを生成（https://から始まる）
+                これにより、サブディレクトリでのインストールでも正しく動作
+                {{#if current}}nav-current{{/if}}: 現在のページの場合、nav-currentクラスを追加
+            --}}
             <a href="{{url absolute="true"}}">{{label}}</a>
         </li>
     {{/foreach}}

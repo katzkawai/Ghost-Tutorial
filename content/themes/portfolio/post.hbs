@@ -1,19 +1,47 @@
+{{!-- 
+    📝 post.hbs - 個別記事ページテンプレート
+    ==========================================
+    このテンプレートは個々のブログ記事やポートフォリオ作品を表示する際に使用されます。
+    
+    {{!< default}}: default.hbs を親テンプレートとして使用
+--}}
 {{!< default}}
 
+{{!-- 
+    <article> タグ: 記事全体を囲むセマンティックHTML5要素
+    post-full: 記事全体のスタイリング用クラス
+--}}
 <article class="post-full">
     <header class="post-header">
         <div class="container">
+            {{!-- 
+                プライマリタグの表示
+                primary_tag: 記事に設定された最初のタグ（メインカテゴリ）
+                {{primary_tag.url}}: タグページへのURL
+                {{primary_tag.name}}: タグ名
+            --}}
             {{#if primary_tag}}
                 <div class="post-category">
                     <a href="{{primary_tag.url}}">{{primary_tag.name}}</a>
                 </div>
             {{/if}}
             
+            {{!-- 記事タイトル: ページのメイン見出し --}}
             <h1 class="post-title">{{title}}</h1>
             
             <div class="post-meta">
+                {{!-- 
+                    著者情報の表示
+                    {{#primary_author}}: メイン著者の情報にアクセス
+                    複数著者がいる場合は {{#foreach authors}} を使用可能
+                --}}
                 {{#primary_author}}
                     <div class="author-info">
+                        {{!-- 
+                            著者のプロフィール画像
+                            size="xs": extra smallサイズ（32px）
+                            サイズオプション: xs, s, m, l, xl
+                        --}}
                         {{#if profile_image}}
                             <img class="author-image" src="{{img_url profile_image size="xs"}}" alt="{{name}}">
                         {{/if}}
@@ -30,26 +58,50 @@
         </div>
     </header>
     
+    {{!-- 
+        フィーチャー画像（アイキャッチ画像）の表示
+        <figure>: HTML5の図表要素
+    --}}
     {{#if feature_image}}
         <figure class="post-image">
+            {{!-- 
+                レスポンシブ画像の実装
+                srcset: 複数の画像サイズを指定し、ブラウザが最適なものを選択
+                sizes: ビューポートに応じた画像の表示サイズを指定
+            --}}
             <img src="{{img_url feature_image size="xl"}}" 
                  srcset="{{img_url feature_image size="m"}} 600w,
                          {{img_url feature_image size="l"}} 1000w,
                          {{img_url feature_image size="xl"}} 2000w"
                  sizes="(max-width: 800px) 100vw, 800px"
                  alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}">
+            
+            {{!-- 
+                画像キャプション
+                Ghostエディタで画像にキャプションを追加できる
+            --}}
             {{#if feature_image_caption}}
                 <figcaption>{{feature_image_caption}}</figcaption>
             {{/if}}
         </figure>
     {{/if}}
     
+    {{!-- 
+        記事本文
+        {{content}}: Ghostエディタで作成されたコンテンツをHTMLで出力
+        Ghostはエディタ内容を適切なHTMLタグに変換して出力
+    --}}
     <section class="post-content">
         {{content}}
     </section>
     
     <footer class="post-footer">
         <div class="container">
+            {{!-- 
+                タグ一覧
+                {{#foreach tags}}: すべてのタグをループ表示
+                各タグはタグアーカイブページへのリンク
+            --}}
             {{#if tags}}
                 <div class="post-tags">
                     {{#foreach tags}}
@@ -61,6 +113,11 @@
             <div class="post-share">
                 <h4>Share this post</h4>
                 <div class="share-buttons">
+                    {{!-- 
+                        Twitterシェアボタン
+                        {{encode title}}: タイトルをURLエンコード
+                        {{url absolute="true"}}: 完全なURLを取得（https://から始まる）
+                    --}}
                     <a href="https://twitter.com/intent/tweet?text={{encode title}}&url={{url absolute="true"}}" 
                        target="_blank" rel="noopener" class="share-twitter">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -87,16 +144,26 @@
                 </div>
             </div>
             
+            {{!-- 
+                著者情報ボックス
+                記事の最後に著者の詳細情報を表示
+            --}}
             {{#primary_author}}
                 <div class="author-box">
+                    {{!-- 著者プロフィール画像（smallサイズ） --}}
                     {{#if profile_image}}
                         <img class="author-box-image" src="{{img_url profile_image size="s"}}" alt="{{name}}">
                     {{/if}}
                     <div class="author-box-content">
                         <h4>About {{name}}</h4>
+                        {{!-- 
+                            著者のプロフィール文
+                            Ghost管理画面の Staff > 著者 > Bio で設定
+                        --}}
                         {{#if bio}}
                             <p>{{bio}}</p>
                         {{/if}}
+                        {{!-- 著者ページへのリンク --}}
                         <a href="{{url}}" class="author-link">View all posts by {{name}} →</a>
                     </div>
                 </div>
@@ -105,11 +172,22 @@
     </footer>
 </article>
 
-{{!-- Related posts --}}
+{{!-- 
+    関連記事セクション
+    <aside>: HTML5の補足情報要素
+--}}
 <aside class="related-posts">
     <div class="container">
         <h3>You might also like</h3>
         <div class="related-grid">
+            {{!-- 
+                関連記事の取得
+                filter="id:-{{id}}+tag:{{primary_tag.slug}}": 
+                - id:-{{id}}: 現在の記事IDを除外
+                - tag:{{primary_tag.slug}}: 同じプライマリタグを持つ記事
+                - +: AND条件
+                limit="3": 最大3件の関連記事を表示
+            --}}
             {{#get "posts" filter="id:-{{id}}+tag:{{primary_tag.slug}}" limit="3" include="tags"}}
                 {{#foreach posts}}
                     <article class="related-item">

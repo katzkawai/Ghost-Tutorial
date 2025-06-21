@@ -1,19 +1,47 @@
 <!DOCTYPE html>
-<html lang="{{@site.locale}}">
+{{!-- 
+    🎨 default.hbs - メインレイアウトテンプレート
+    ==========================================
+    このファイルはすべてのページで使用される基本的なHTML構造を定義します。
+    他のテンプレート（index.hbs、post.hbs等）の内容は {{{body}}} の部分に挿入されます。
+    
+    重要な概念：
+    - {{! }} または {{!-- --}} : Handlebarsのコメント（HTMLには出力されません）
+    - {{ }} : 変数や値を出力
+    - {{{ }}} : HTMLをエスケープせずに出力
+    - {{#if}} {{/if}} : 条件分岐
+    - {{@site}} : サイト全体の設定にアクセス
+    - {{@custom}} : テーマのカスタム設定にアクセス
+--}}
+<html lang="{{@site.locale}}">{{!-- サイトの言語設定を自動的に適用 --}}
 <head>
+    {{!-- 文字エンコーディングとレスポンシブ設定 --}}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    {{!-- ページタイトル: Ghostが自動的に適切なタイトルを生成 --}}
     <title>{{meta_title}}</title>
     
-    {{!-- Font loading for better performance --}}
+    {{!-- 
+        Webフォントの読み込み最適化
+        preconnect: フォントサーバーへの接続を事前に確立してパフォーマンスを向上
+    --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     
-    {{!-- Theme styles --}}
+    {{!-- 
+        テーマのCSSファイル
+        {{asset}} ヘルパー: テーマのassetsフォルダ内のファイルへのパスを生成
+        "built/style.css": コンパイルされたCSSファイル
+    --}}
     <link rel="stylesheet" href="{{asset "built/style.css"}}">
     
-    {{!-- Custom theme settings --}}
+    {{!-- 
+        カスタムテーマ設定
+        Ghost管理画面で設定した値を使用してCSSカスタムプロパティを定義
+        {{@custom.フィールド名}} でカスタム設定にアクセス
+    --}}
     <style>
         :root {
             --accent-color: {{@custom.accent_color}};
@@ -46,16 +74,56 @@
         }
     </style>
     
+    {{!-- 
+        {{ghost_head}} - Ghost必須のヘルパー
+        以下を自動的に挿入：
+        - メタタグ（SEO、Open Graph、Twitter Card等）
+        - 構造化データ（JSON-LD）
+        - RSS/Atomフィード
+        - カスタムコード（管理画面で設定したもの）
+        - その他Ghostが必要とするもの
+    --}}
     {{ghost_head}}
 </head>
+{{!-- 
+    body要素
+    {{body_class}}: Ghostが自動的に適切なクラスを追加
+    例：
+    - home-template: ホームページ
+    - post-template: 記事ページ
+    - page-template: 固定ページ
+    - tag-template: タグページ
+    - author-template: 著者ページ
+    - paged: ページネーションされたページ
+    
+    portfolio-theme: このテーマ独自のクラス
+--}}
 <body class="{{body_class}} portfolio-theme">
     
-    {{!-- Site header --}}
+    {{!-- 
+        サイトヘッダー - すべてのページで表示される共通ヘッダー
+    --}}
     <header class="site-header">
+        {{!-- 
+            メインナビゲーション
+            {{#match}} ヘルパー: 値が一致するかチェック
+            @custom.navigation_layout が "Logo in center" の場合、nav-centerクラスを追加
+        --}}
         <nav class="site-nav container {{#match @custom.navigation_layout "Logo in center"}}nav-center{{/match}}">
             <div class="nav-left">
+                {{!-- 
+                    左側のロゴ表示
+                    {{^match}}: matchの否定（一致しない場合）
+                    つまり、navigation_layoutが"Logo in center"でない場合のみ表示
+                --}}
                 {{^match @custom.navigation_layout "Logo in center"}}
                 <a href="{{@site.url}}" class="site-logo">
+                    {{!-- 
+                        条件分岐でロゴ画像またはテキストを表示
+                        {{#if @site.logo}}: ロゴが設定されている場合
+                        {{else}}: ロゴが設定されていない場合
+                        {{/if}}: 条件分岐の終了
+                    --}}
                     {{#if @site.logo}}
                         <img src="{{@site.logo}}" alt="{{@site.title}}">
                     {{else}}
@@ -78,6 +146,12 @@
             {{/match}}
             
             <div class="nav-menu">
+                {{!-- 
+                    {{navigation}} ヘルパー
+                    Ghost管理画面で設定したナビゲーションメニューを自動生成
+                    デフォルトでは主要ナビゲーションを表示
+                    {{navigation type="secondary"}} で副ナビゲーションを表示可能
+                --}}
                 {{navigation}}
             </div>
             
@@ -114,7 +188,11 @@
         </div>
     </header>
     
-    {{!-- Main content --}}
+    {{!-- 
+        メインコンテンツエリア
+        {{{body}}}: 他のテンプレートファイル（index.hbs、post.hbs等）の内容がここに挿入される
+        3つの中括弧 {{{ }}} はHTMLをエスケープせずにそのまま出力
+    --}}
     <main class="site-main">
         {{{body}}}
     </main>
@@ -131,6 +209,12 @@
                     
                     {{#if @custom.show_social_links}}
                     <div class="social-links">
+                        {{!-- 
+                            Twitterリンク
+                            {{twitter_url}} ヘルパー: Twitterのユーザー名からURLを生成
+                            target="_blank": 新しいタブで開く
+                            rel="noopener": セキュリティ対策
+                        --}}
                         {{#if @site.twitter}}
                             <a href="{{twitter_url @site.twitter}}" target="_blank" rel="noopener" aria-label="Twitter">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -152,12 +236,24 @@
                 <div class="footer-section">
                     <h4>Quick Links</h4>
                     <nav class="footer-nav">
+                        {{!-- 
+                            副ナビゲーション（フッター用）
+                            type="secondary": Ghost管理画面で設定した副ナビゲーションを表示
+                        --}}
                         {{navigation type="secondary"}}
                     </nav>
                 </div>
             </div>
             
             <div class="footer-bottom">
+                {{!-- 
+                    コピーライト表示
+                    {{date format="YYYY"}}: 現在の年を表示（例：2024）
+                    formatには様々な形式を指定可能：
+                    - "YYYY年MM月DD日"
+                    - "MMMM DD, YYYY"
+                    - "DD/MM/YYYY"
+                --}}
                 <p>&copy; {{date format="YYYY"}} {{@site.title}}. All rights reserved.</p>
                 <p>Powered by <a href="https://ghost.org" target="_blank" rel="noopener">Ghost</a></p>
             </div>
@@ -193,6 +289,15 @@
         });
     </script>
     
+    {{!-- 
+        {{ghost_foot}} - Ghost必須のヘルパー
+        以下を自動的に挿入：
+        - Ghost管理画面で設定したフッターコード
+        - 必要なJavaScriptライブラリ
+        - その他Ghostが必要とするスクリプト
+        
+        重要：このヘルパーは</body>タグの直前に必ず配置する必要があります
+    --}}
     {{ghost_foot}}
 </body>
 </html>

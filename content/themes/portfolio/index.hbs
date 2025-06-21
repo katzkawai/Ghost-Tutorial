@@ -1,10 +1,30 @@
+{{!-- 
+    🏠 index.hbs - ホームページテンプレート
+    ==========================================
+    これはサイトのトップページ（ホーム）で使用されるテンプレートです。
+    
+    {{!< default}} の意味：
+    - このテンプレートは default.hbs を親テンプレートとして使用
+    - このファイルの内容が default.hbs の {{{body}}} 部分に挿入される
+    - レイアウトの継承により、ヘッダーやフッターを再利用
+--}}
 {{!< default}}
 
-{{!-- Hero section --}}
+{{!-- 
+    ヒーローセクション - ページトップの大きなバナーエリア
+    {{@custom.hero_style}}: Ghost管理画面で設定したヒーロースタイルのクラスを適用
+--}}
 <section class="hero {{@custom.hero_style}}">
     <div class="container">
         <div class="hero-content">
+            {{!-- サイトタイトルを大きく表示 --}}
             <h1 class="hero-title">{{@site.title}}</h1>
+            
+            {{!-- 
+                サイト説明文の条件付き表示
+                {{#if @site.description}}: サイト説明が設定されている場合のみ表示
+                管理画面の Settings > General > Site description で設定
+            --}}
             {{#if @site.description}}
                 <p class="hero-description">{{@site.description}}</p>
             {{/if}}
@@ -17,7 +37,10 @@
     </div>
 </section>
 
-{{!-- Featured work section --}}
+{{!-- 
+    特集作品セクション
+    id="portfolio": ページ内リンクのアンカーポイント
+--}}
 <section id="portfolio" class="portfolio-section">
     <div class="container">
         <div class="section-header">
@@ -25,13 +48,39 @@
             <p class="section-subtitle">Explore my latest projects and creative works</p>
         </div>
         
+        {{!-- 
+            ポートフォリオグリッド
+            {{@custom.portfolio_layout}}: カスタム設定でグリッドレイアウトを変更可能
+            例："grid-3" （3列）、"grid-masonry" （Masonryレイアウト）など
+        --}}
         <div class="portfolio-grid {{@custom.portfolio_layout}}">
+            {{!-- 
+                {{#get}} ヘルパー - データベースから投稿を取得
+                パラメータ：
+                - "posts": 投稿を取得（"pages"でページ、"tags"でタグも可能）
+                - filter="featured:true": 特集記事のみをフィルタリング
+                - limit="6": 最大6件まで取得
+                - include="tags,authors": タグと著者情報も一緒に取得
+                
+                {{#foreach posts}}: 取得した投稿をループ処理
+            --}}
             {{#get "posts" filter="featured:true" limit="6" include="tags,authors"}}
                 {{#foreach posts}}
                     <article class="portfolio-item">
                         <a href="{{url}}" class="portfolio-link">
                             {{#if feature_image}}
                                 <div class="portfolio-image">
+                                    {{!-- 
+                                        レスポンシブ画像の実装
+                                        {{img_url}} ヘルパー: 画像URLを生成
+                                        - size="l": デフォルトサイズ（large）
+                                        - srcset: 異なるサイズの画像を指定（ブラウザが最適なサイズを選択）
+                                          - s: small (300px幅)
+                                          - m: medium (600px幅)
+                                          - l: large (1000px幅)
+                                        - sizes: ビューポートに応じた画像サイズの指定
+                                        - loading="lazy": 遅延読み込みでパフォーマンス向上
+                                    --}}
                                     <img src="{{img_url feature_image size="l"}}" 
                                          srcset="{{img_url feature_image size="s"}} 300w,
                                                  {{img_url feature_image size="m"}} 600w,
@@ -47,12 +96,23 @@
                             
                             <div class="portfolio-content">
                                 <h3 class="portfolio-title">{{title}}</h3>
+                                {{!-- 
+                                    抜粋テキストの表示
+                                    custom_excerpt: 手動で設定した抜粋がある場合は優先
+                                    excerpt words="20": なければ本文から20単語を自動抽出
+                                --}}
                                 {{#if custom_excerpt}}
                                     <p class="portfolio-excerpt">{{custom_excerpt}}</p>
                                 {{else}}
                                     <p class="portfolio-excerpt">{{excerpt words="20"}}</p>
                                 {{/if}}
                                 
+                                {{!-- 
+                                    タグの表示
+                                    {{#if tags}}: タグが存在する場合のみ表示
+                                    {{#foreach tags limit="3"}}: 最大3つまでのタグをループ
+                                    {{name}}: タグ名を表示
+                                --}}
                                 {{#if tags}}
                                     <div class="portfolio-tags">
                                         {{#foreach tags limit="3"}}
@@ -121,7 +181,10 @@
     </div>
 </section>
 
-{{!-- Recent blog posts --}}
+{{!-- 
+    最新ブログ記事セクション
+    特集記事以外の通常のブログ記事を表示
+--}}
 <section class="blog-section">
     <div class="container">
         <div class="section-header">
@@ -130,6 +193,10 @@
         </div>
         
         <div class="blog-grid">
+            {{!-- 
+                filter="featured:false": 特集記事ではない通常の記事を取得
+                limit="3": 最新3件を表示
+            --}}
             {{#get "posts" filter="featured:false" limit="3" include="tags,authors"}}
                 {{#foreach posts}}
                     <article class="blog-item">
@@ -144,7 +211,17 @@
                             
                             <div class="blog-content">
                                 <div class="blog-meta">
+                                    {{!-- 
+                                        日付の表示
+                                        datetime属性: 機械読み取り用の標準形式（SEO対策）
+                                        表示形式: "Jan 15, 2024" のような読みやすい形式
+                                    --}}
                                     <time datetime="{{date format="YYYY-MM-DD"}}">{{date format="MMM DD, YYYY"}}</time>
+                                    
+                                    {{!-- 
+                                        読了時間の表示
+                                        {{reading_time}}: Ghostが自動計算した読了時間
+                                    --}}
                                     {{#if reading_time}}
                                         <span class="reading-time">{{reading_time}}</span>
                                     {{/if}}
@@ -167,7 +244,10 @@
     </div>
 </section>
 
-{{!-- CTA section --}}
+{{!-- 
+    CTA（Call to Action）セクション
+    訪問者にアクションを促すセクション（お問い合わせへの誘導）
+--}}
 <section class="cta-section">
     <div class="container">
         <div class="cta-content">

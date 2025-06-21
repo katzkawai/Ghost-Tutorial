@@ -1,13 +1,48 @@
+{{!-- 
+    📨 email-subscription.hbs - メール購読パーシャル
+    ==========================================
+    Ghost Members機能を使用したメール購読フォームです。
+    
+    Ghost Membersについて：
+    - Ghostの統合会員管理機能
+    - 管理画面の Settings > Members で有効化
+    - 無料・有料会員の管理が可能
+    
+    使い方：
+    {{> "email-subscription"}} でこのパーシャルを任意の場所に挿入
+--}}
+
 <div class="email-subscription">
     <h3>Subscribe to Newsletter</h3>
     <p>Get the latest posts delivered to your inbox.</p>
+    
+    {{!-- 
+        Ghost Membersフォーム
+        data-members-form="subscribe": Ghostが購読フォームとして認識
+        この属性があると、Ghostが自動的にフォーム送信を処理
+    --}}
     <form data-members-form="subscribe">
+        {{!-- 
+            data-members-email: メールアドレス入力フィールドを指定
+            Ghostがこのフィールドからメールアドレスを取得
+        --}}
         <input type="email" placeholder="Your email address" required data-members-email>
         <button type="submit">Subscribe</button>
     </form>
+    
+    {{!-- 
+        成功メッセージ
+        Ghostが自動的に表示/非表示を制御
+        購読成功時に表示される
+    --}}
     <div class="message-success">
         <strong>Great!</strong> Check your inbox and click the link to confirm your subscription.
     </div>
+    
+    {{!-- 
+        エラーメッセージ
+        無効なメールアドレスやエラー発生時に表示
+    --}}
     <div class="message-error">
         Please enter a valid email address!
     </div>

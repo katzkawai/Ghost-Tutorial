@@ -1,22 +1,54 @@
+{{!-- 
+    📄 page.hbs - 固定ページテンプレート
+    ==========================================
+    このテンプレートはGhostの固定ページ（Pages）で使用されます。
+    固定ページはブログ記事とは異なり、タイムラインに表示されないコンテンツです。
+    例：Aboutページ、Contactページ、プライバシーポリシーなど
+    
+    {{!< default}}: default.hbs を親テンプレートとして使用
+    このファイルの内容が default.hbs の {{{body}}} 部分に挿入される
+--}}
 {{!< default}}
-{{!-- The tag above means: insert everything in this file into the body of the default.hbs template --}}
 
 <article class="page-full">
-    {{!-- Check if title and feature image should be shown based on page settings --}}
+    {{!-- 
+        Ghost Betaエディタのページ設定チェック
+        @page.show_title_and_feature_image: 
+        - Ghostエディタでページごとに設定可能
+        - falseの場合、タイトルとフィーチャー画像を非表示
+        - true（デフォルト）の場合、通常通り表示
+        
+        {{#unless}}: 条件が偽の場合に実行（{{#if}}の逆）
+        {{else}}: unlessブロックのelse部分
+    --}}
     {{#unless @page.show_title_and_feature_image}}
-        {{!-- Hide title and feature image if setting is false --}}
+        {{!-- 設定がfalseの場合、タイトルとフィーチャー画像を非表示 --}}
     {{else}}
         <header class="page-header">
             <div class="container">
+                {{!-- ページタイトル --}}
                 <h1 class="page-title">{{title}}</h1>
+                
+                {{!-- 
+                    カスタム抜粋
+                    custom_excerpt: Ghostエディタで手動設定した抜粋文
+                    ページの概要や説明を表示するのに便利
+                --}}
                 {{#if custom_excerpt}}
                     <p class="page-excerpt">{{custom_excerpt}}</p>
                 {{/if}}
             </div>
         </header>
         
+        {{!-- フィーチャー画像の表示 --}}
         {{#if feature_image}}
             <figure class="page-image">
+                {{!-- 
+                    レスポンシブ画像
+                    sizes="(max-width: 1200px) 100vw, 1200px": 
+                    - 1200px以下の画面では画面幅いっぱい
+                    - それ以上では最大幅1200px
+                --}}
                 <img src="{{img_url feature_image size="xl"}}" 
                      srcset="{{img_url feature_image size="m"}} 600w,
                              {{img_url feature_image size="l"}} 1000w,
@@ -31,6 +63,11 @@
         {{/if}}
     {{/unless}}
     
+    {{!-- 
+        ページコンテンツ
+        gh-content: Ghostのコンテンツ用クラス（エディタブロックのスタイリング用）
+        {{content}}: ページの本文内容をHTMLで出力
+    --}}
     <section class="page-content gh-content">
         {{content}}
     </section>
